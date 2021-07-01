@@ -1,38 +1,72 @@
-.App {
+body{
+  margin:0px;
+  background-color: #e0e0e0;
+}
+
+/* Home page styling */
+.home-page{
   text-align: center;
+  margin-top: 25%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.login-btn{
+  background-color: rgb(82, 190, 82);
+  padding: 5px;
+  color:wheat;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Nav bar styling */
+
+.navbar{
+  position: relative;
+  padding:10px;
+  height:50px;
+  background-color:blue;
+}
+.nav-header{
+  margin:0px;
+  color:white;
+}
+.blog__search{
+  height:30px;
+  margin-top:30px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.user-data{
+  position: absolute;
+  top:11px;
+  width:95%;
+  text-align: end;
 }
 
-.App-link {
-  color: #61dafb;
+.profile-img{
+  float:right;
+  margin-right: 50px;
+
+}
+.signedIn{
+  position: absolute;
+  top: 43px;
+  height:15px;
+  color:white;
+  line-height: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logout-btn{
+  position: absolute;
+  top:10px;
+  border-radius: 2px;
+  margin-left: 50px;
+}
+
+
+/*Search Bar */
+.search{
+  width:90%;
+  height:20px;
+}
+.search-btn{
+  line-height: 21px;
+  border-radius: 2px;
+
 }
