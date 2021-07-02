@@ -8,6 +8,7 @@ const userSlice = createSlice({
     blogData: null,
     searchInput :"",
   },
+  
   reducers: {
     setSignedIn: (state, action) => {
       state.isSignedIn = action.payload;

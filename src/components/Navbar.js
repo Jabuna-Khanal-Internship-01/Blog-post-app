@@ -28,6 +28,7 @@ const NavBar = () => {
   };
 
   return (
+    
     <div className="navbar">
       <h1 className="nav-header">Blog post </h1>
       {isSignedIn && (
