@@ -1,41 +1,57 @@
- import React ,{useEffect, useState} from 'react';
- import axios from 'axios';
- import * as BlogServices from "../service/api"
-
- import { useDispatch, useSelector } from 'react-redux';
- import { selectUserInput, setBlogData } from '../features/userSlice';
-
+import React, { useEffect, useState } from "react";
+import * as BlogServices from "../service/api";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserInput, setBlogData } from "../features/userSlice";
+import { BrowserRouter, Route, Switch, Link , useHistory} from 'react-router-dom'
 
 
- const Blogs =() =>{
-     const searchInput = useSelector(selectUserInput);
-    const dispatch = useDispatch();
-    const[blogs,setBlogs] =useState();
-    const [loading, setLoading] =useState(true);
+const Blogs = (props) => {
+  const history = useHistory();
+  console.log(props,'----');
+  const searchInput = useSelector(selectUserInput);
+  const dispatch = useDispatch();
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+ 
+  useEffect(() => {
+    BlogServices.getPostBySearchText(searchInput)
+      .then((res) => {
+        dispatch(setBlogData(res.data.data));
+        setBlogs(res.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchInput]);
 
 
-    useEffect(()=>{
-      BlogServices.getPostBySearchText(searchInput).then((res)=>{
-            dispatch(setBlogData(res.data));
-            setBlogs(res.data);
-            console.log(res.data);
-            setLoading(false);
-        })
-        .catch((err)=>{
-            console.log(err);
-        });
-    },[searchInput]);
+  const renderPost = (blog) => {
 
+    return (
+      <div className="blog">
+        <h1 className ="blog-title">
+          Title: {blog.title} 
+          <a className="post-by">By :{blog.users.name}</a>
+        </h1>
+        <p className="post-des">Description: {blog.description}</p> <br />  
+        <button onClick={()=>{history.push({
+          pathname:'/details'
+          ,state:blog._id})}} className="detail-btn">
+          Details</button>
+      </div>
+    );
+  };
+ 
+  return (
 
-     return (
-     <div className="blogs">
-         <span></span>
-     </div>
-    )
- }
+    <div className="blogs">
+      <div className="blogs-header">Total Post:  {blogs.length}</div>
+      {loading ? <h1>loading....</h1> : ""}
+      <div>{blogs.map((blog) => renderPost(blog))}</div>
+    </div>
+  );
+};
 
-
-
-
-
- export default Blogs;
+export default Blogs;
