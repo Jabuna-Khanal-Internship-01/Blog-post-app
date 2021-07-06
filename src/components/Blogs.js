@@ -2,18 +2,15 @@ import React, { useEffect, useState } from "react";
 import * as BlogServices from "../service/api";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserInput, setBlogData } from "../features/userSlice";
-import { BrowserRouter, Route, Switch, Link , useHistory} from 'react-router-dom'
-
+import {useHistory} from 'react-router-dom'
 
 const Blogs = (props) => {
   const history = useHistory();
-  console.log(props,'----');
   const searchInput = useSelector(selectUserInput);
   const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
- 
   useEffect(() => {
     BlogServices.getPostBySearchText(searchInput)
       .then((res) => {
@@ -26,9 +23,7 @@ const Blogs = (props) => {
       });
   }, [searchInput]);
 
-
   const renderPost = (blog) => {
-
     return (
       <div className="blog">
         <h1 className ="blog-title">
@@ -37,15 +32,14 @@ const Blogs = (props) => {
         </h1>
         <p className="post-des">Description: {blog.description}</p> <br />  
         <button onClick={()=>{history.push({
-          pathname:'/details'
-          ,state:blog._id})}} className="detail-btn">
+          pathname:'/details',
+          state:blog._id})}} className="detail-btn">
           Details</button>
       </div>
     );
   };
  
   return (
-
     <div className="blogs">
       <div className="blogs-header">Total Post:  {blogs.length}</div>
       {loading ? <h1>loading....</h1> : ""}

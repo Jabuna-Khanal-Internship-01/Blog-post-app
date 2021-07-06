@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, {useState } from "react";
+import {useHistory} from 'react-router-dom'
 import { Avatar } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,45 +8,70 @@ import {
   setInput,
   setSignedIn,
   setUserData,
+  setUserId,
 } from "../features/userSlice";
 import { GoogleLogout, GoogleLogin } from "react-google-login";
+import * as BlogServices from "../service/api";
+import CreateBlog from "./CreateBlog";
 
 const NavBar = () => {
+  const history = useHistory();
   const [inputValue, setInputValue] = useState("");
   const isSignedIn = useSelector(selectSignedIn);
   const userData = useSelector(selectUserData);
+  const [tokenId, setTokenId] = useState("");
+
   const dispatch = useDispatch();
+  dispatch(setUserId(tokenId));
+
   const logout = (res) => {
     dispatch(setSignedIn(false));
     dispatch(setUserData(null));
+    setTokenId("");
   };
 
   const login = (res) => {
-    console.log(res, "-----");
+    console.log(res, "----");
     dispatch(setSignedIn(true));
     dispatch(setUserData(res.profileObj));
-  };
 
+    BlogServices.logIn({ token: res.tokenId })
+      .then((res) => {
+        setTokenId(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(setInput(inputValue));
   };
 
+
+
   return (
     <div className="navbar">
-      <h1 className="nav-header">Blog post </h1>
+      <h1 className="nav-header">BLOG POST</h1>
       {isSignedIn && (
-        <div className="blog__search">
-          <input
-            className="search"
-            placeholder="Search for a blog"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <button className="search-btn" onClick={handleClick}>
-            Search
+        <>
+          <button className="create-blog-btn" onClick={()=>{ history.push({
+          pathname:'/createpost'})}} >
+            Create a blog
           </button>
-        </div>
+
+          <div className="blog__search">
+            <input
+              className="search"
+              placeholder="Search for a blog"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button className="search-btn" onClick={handleClick}>
+              Search
+            </button>
+          </div>
+        </>
       )}
 
       {isSignedIn ? (
@@ -58,7 +83,7 @@ const NavBar = () => {
           />
           <span className="signedIn">{userData?.name}</span>
           <GoogleLogout
-            clientId="462975936573-kg2l3a95alo3c6mepf4odhmi8342ghgj.apps.googleusercontent.com"
+            clientId="1058823769266-758kalf90cmirensqppf8qt6rfebpvjs.apps.googleusercontent.com"
             render={(renderProps) => (
               <button
                 onClick={renderProps.onClick}
@@ -86,7 +111,7 @@ const NavBar = () => {
           </div>
           <div className="user-data">
             <GoogleLogin
-              clientId="462975936573-kg2l3a95alo3c6mepf4odhmi8342ghgj.apps.googleusercontent.com"
+              clientId="1058823769266-758kalf90cmirensqppf8qt6rfebpvjs.apps.googleusercontent.com"
               render={(renderProps) => (
                 <button
                   onClick={renderProps.onClick}

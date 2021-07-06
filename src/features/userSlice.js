@@ -6,9 +6,11 @@ const userSlice = createSlice({
     isSignedIn: false,
     userData: null,
     blogData: null,
-    searchInput :"",
+    searchInput: "",
+    postDetail: "",
+    userId:"",
   },
-  
+
   reducers: {
     setSignedIn: (state, action) => {
       state.isSignedIn = action.payload;
@@ -20,17 +22,26 @@ const userSlice = createSlice({
       state.blogData = action.payload;
     },
     setInput: (state, action) => {
-        state.searchInput= action.payload;
-      },
-  },  
+      state.searchInput = action.payload;
+    },
+    setDetail: (state, action) => {
+      state.postDetail = action.payload;
+    },
+    setUserId:(state, action) => {
+      state.userId= action.payload;
+    },
+  },
 });
 
-export const { setSignedIn, setUserData, setBlogData,setInput } = userSlice.actions;
+export const { setSignedIn, setUserData, setBlogData, setInput, setDetail , setUserId} =
+  userSlice.actions;
 
-export const selectSignedIn =(state) => state.user.isSignedIn;
-export const selectUserData =(state) => state.user.userData;
-export const selectBlogData =(state) => state.user.blogData;
-export const selectUserInput =(state) => state.user.searchInput ;
-
+export const selectSignedIn = (state) => state.user.isSignedIn;
+export const selectUserData = (state) => state.user.userData;
+export const selectBlogData = (state) => state.user.blogData;
+export const selectUserInput = (state) => state.user.searchInput;
+export const selectDetail = (state) => state.user.postDetail;
+export const selectUserId = (state) => state.user.userId;
 
 export default userSlice.reducer;
+
