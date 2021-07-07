@@ -3,43 +3,101 @@ import NavBar from "./Navbar";
 import * as BlogServices from "../service/api";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setDetail, selectUserId } from "../features/userSlice";
+import { setDetail, selectUserId, selectSignedIn } from "../features/userSlice";
 
 const Detail = (props) => {
   const dispatch = useDispatch();
   const userId = useSelector(selectUserId);
-  const [posterId, setPosterId] = useState("");
+  const isSignedIn = useSelector(selectSignedIn);
   const [details, setDetails] = useState([]);
-
+  const [isAuthor, setIsAuthor] = useState(false);
+  const [comment, setComment] = useState("");
+  const[titleId, setTitleId] =  useState("");
 
   useEffect(() => {
     BlogServices.getPostById(props.location.state)
       .then((res) => {
         dispatch(setDetail(res.comments));
         setDetails(res.comments);
-        setPosterId(res.users._id);
+        setTitleId(res.id);
+        const canEdit = userId !== "" && userId === res.users._id;
+        setIsAuthor(canEdit);
       })
       .catch((err) => {
         console.log(err);
       });
+      
+      
   }, []);
 
+  const deleteBlogPost = () => {
+    BlogServices.deletePost(props.location.state)
+      .then((res) => {
+        console.log("deleted post");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  
+  const postComment =() =>{
+    console.log(comment);
+    BlogServices.addComment(titleId,{description:comment})
+        .then((res) => {
+         console.log("comment added successfully")
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+
+
   const renderDetail = (detail) => {
-      return (
-        <div className="blog">
-          <p className="blog-title">{detail.description}</p>
-          <a className="post-by">By:{detail.users.name}</a>
-        </div>
-      );
-    };
+    return (
+      <>
+        {isAuthor ? (
+          <div className="blog">
+            <p className="blog-title">{detail.description}</p>
+            <a className="post-by">By:{detail.users.name}</a>
+            <button>edit</button>
+            <button>delete</button>
+          </div>
+        ) : (
+          <div className="blog">
+            <p className="blog-title">{detail.description}</p>
+            <a className="post-by">By:{detail.users.name}</a>
+          </div>
+        )}
+      </>
+    );
+  };
 
   return (
     <>
       <NavBar />
-      <div className="blogs">
-        <div className="blogs-header">Comments: {details.length}</div>
-        <div>{details.map((detail) => renderDetail(detail))}</div>
-      </div>
+      {isSignedIn ? (
+        <>
+          <div className="add-comment">
+            <p className="comment-header">Add comment</p>
+            <input
+              className="comment-text"
+              onChange={(e) => setComment(e.target.value)}
+            ></input>
+            <button className="save-btn" onClick={postComment}>Add</button>
+          </div>
+          <div className="blogs">
+            <div className="blogs-header">Comments: {details.length}</div>
+            <div>{details.map((detail) => renderDetail(detail))}</div>
+          </div>
+        </>
+      ) : (
+        <div className="blogs">
+          <div className="blogs-header">Comments: {details.length}</div>
+          <div>{details.map((detail) => renderDetail(detail))}</div>
+        </div>
+      )}
+
+      {isAuthor && <button onClick={deleteBlogPost}>delete</button>}
     </>
   );
 };

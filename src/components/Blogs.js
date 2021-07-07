@@ -24,6 +24,7 @@ const Blogs = (props) => {
   }, [searchInput]);
 
   const renderPost = (blog) => {
+
     return (
       <div className="blog">
         <h1 className ="blog-title">

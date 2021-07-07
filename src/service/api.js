@@ -31,6 +31,31 @@ export async function getPostById(id) {
 export async function createPost(post) {
   const url = `${api.endpoints.posts}`;
   const response = await http.post(url,post);
-  console.log(response, "posted");
+  return response;
+}
+
+export async function deletePost(id){
+  const url = `${api.endpoints.posts}/${id}`;
+  const response = await http.delete(url);
+  return response;
+}
+
+export async function getUserDetail(id){
+  const url = `${api.endpoints.users}/${id}`;
+  const response = await http.get(url);
+  return response;
+}
+
+export async function updateUserDetail(id, detail){
+  const url = `${api.endpoints.users}/${id}`;
+  const response = await http.put(url,detail);
+  return response;
+
+}
+
+export async function addComment(id,description){
+  const url = `${api.endpoints.posts}/${id}/comments`;
+  const response = await http.post(url,description);
+  console.log(response);
   return response;
 }

@@ -31,6 +31,7 @@ const NavBar = () => {
   };
 
   const login = (res) => {
+    console.log(res,'response')
     dispatch(setSignedIn(true));
     dispatch(setUserData(res.profileObj));
     
@@ -96,6 +97,8 @@ const NavBar = () => {
             )}
             onLogoutSuccess={logout}
           />
+          <button className="profile-btn" onClick={()=>{ history.push({
+          pathname:'/profile'})}}>Profile</button>
         </div>
       ) : (
         <>
@@ -122,9 +125,11 @@ const NavBar = () => {
                   Login/Signin with google
                 </button>
               )}
+              
               onSuccess={login}
               cookiePolicy={"single_host_origin"}
             />
+            
           </div>
         </>
       )}
