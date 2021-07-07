@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectSignedIn,
   selectUserData,
+  selectUserId,
   setInput,
   setSignedIn,
   setUserData,
@@ -12,43 +13,43 @@ import {
 } from "../features/userSlice";
 import { GoogleLogout, GoogleLogin } from "react-google-login";
 import * as BlogServices from "../service/api";
-import CreateBlog from "./CreateBlog";
+import {setToken, getToken} from '../utils/Token';
 
 const NavBar = () => {
   const history = useHistory();
   const [inputValue, setInputValue] = useState("");
   const isSignedIn = useSelector(selectSignedIn);
   const userData = useSelector(selectUserData);
-  const [tokenId, setTokenId] = useState("");
-
+  const userId = useSelector(selectUserId);
   const dispatch = useDispatch();
-  dispatch(setUserId(tokenId));
+
 
   const logout = (res) => {
     dispatch(setSignedIn(false));
     dispatch(setUserData(null));
-    setTokenId("");
+    setToken("");
   };
 
   const login = (res) => {
-    console.log(res, "----");
     dispatch(setSignedIn(true));
     dispatch(setUserData(res.profileObj));
-
+    
     BlogServices.logIn({ token: res.tokenId })
-      .then((res) => {
-        setTokenId(res);
+    .then((res) => {
+      console.log(res);
+      const id =(res.data.data.accessToken);
+      setToken(id);
+      dispatch(setUserId(res.data.data.id));
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(setInput(inputValue));
-  };
-
-
+  }
 
   return (
     <div className="navbar">

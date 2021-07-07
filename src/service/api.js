@@ -6,8 +6,7 @@ const { api } = config;
 export async function logIn(tokenId) {
   const url = `${api.endpoints.auth}`;
   const response = await http.post(url, tokenId);
-  const id = response.data.data.id;
-  return id;
+  return response;
 }
 
 export async function getPosts() {
@@ -25,7 +24,7 @@ export async function getPostBySearchText(searchInput) {
 export async function getPostById(id) {
   const url = `${api.endpoints.posts}/${id}`;
   const result = await http.get(url);
-  const response = result.data.data.comments;
+  const response = result.data.data;
   return response;
 }
 
