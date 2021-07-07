@@ -17,6 +17,7 @@ const Detail = (props) => {
   useEffect(() => {
     BlogServices.getPostById(props.location.state)
       .then((res) => {
+        console.log(res)
         dispatch(setDetail(res.comments));
         setDetails(res.comments);
         setTitleId(res.id);
@@ -41,26 +42,40 @@ const Detail = (props) => {
   };
   
   const postComment =() =>{
-    console.log(comment);
     BlogServices.addComment(titleId,{description:comment})
         .then((res) => {
-         console.log("comment added successfully")
+          console.log(res)
+          console.log("comment added successfully")
         })
         .catch((err) => {
           console.log(err);
         });
       }
 
+  
 
   const renderDetail = (detail) => {
+    const delComment =() =>{
+        
+      BlogServices.deleteComment(detail._id)
+      .then((res) => {
+       console.log("comment delete successfully")
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    const editComment =() =>{
+      console.log('test')
+    } 
     return (
       <>
         {isAuthor ? (
           <div className="blog">
             <p className="blog-title">{detail.description}</p>
             <a className="post-by">By:{detail.users.name}</a>
-            <button>edit</button>
-            <button>delete</button>
+            <button onClick={editComment}>Edit</button>
+            <button onClick={delComment}>Delete</button>
           </div>
         ) : (
           <div className="blog">

@@ -56,6 +56,11 @@ export async function updateUserDetail(id, detail){
 export async function addComment(id,description){
   const url = `${api.endpoints.posts}/${id}/comments`;
   const response = await http.post(url,description);
-  console.log(response);
+  return response;
+}
+
+export async function deleteComment(id){
+  const url = `${api.endpoints.comments}/${id}`;
+  const response = await http.delete(url);
   return response;
 }
