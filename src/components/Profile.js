@@ -1,12 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUserId } from "../features/userSlice";
 import * as BlogServices from "../service/api";
 
 const Profile = () => {
   const userId = useSelector(selectUserId);
-  const dispatch = useDispatch();
   const [detail, setUserDetail] = useState("");
   const[userNumber,setUserNumber] =useState("");
   const[userAddress, setUserAddress] = useState("");
@@ -15,8 +14,11 @@ const Profile = () => {
   useEffect(() => {
     BlogServices.getUserDetail(userId)
       .then((res) => {
-        console.log(res.data.data)
         setUserDetail(res.data.data);
+        setUserName(res.data.data.name);
+        setUserAddress(res.data.data.address);
+        setUserNumber(res.data.data.phoneNumber);
+        setUserEmail(res.data.data.email);
       })
       .catch((err) => {
         console.log(err);
@@ -30,10 +32,13 @@ const Profile = () => {
       phoneNumber:userNumber,
       address:userAddress
     }
-    console.log(detail,'yo detail ho')
+
     BlogServices.updateUserDetail(userId,detail)
       .then((res) => {
-        console.log(res.data.data)
+        setUserName(res.data.data.name);
+        setUserAddress(res.data.data.address);
+        setUserNumber(res.data.data.phoneNumber);
+        setUserEmail(res.data.data.email);
 
       })
       .catch((err) => {
@@ -42,17 +47,17 @@ const Profile = () => {
   }
 
   const userDetail = (detail) => {
-    console.log(detail);
+
     return (
       <div className="profile">
         <label>User Name:</label>
-        <input placeholder={detail.name}onChange={(e) => setUserName(e.target.value)} ></input><br />
+        <input value={userName} onChange={(e) => setUserName(e.target.value)} ></input><br />
         <label>User Email:</label>
-        <input placeholder={detail.email} onChange={(e) => setUserEmail(e.target.value)} ></input><br />
+        <input value={userEmail} onChange={(e) => setUserEmail(e.target.value)} ></input><br />
         <label>User Number:</label>
-        <input placeholder={detail.phoneNumber}  onChange={(e) => setUserNumber(e.target.value)}></input><br />
+        <input value={userNumber}  onChange={(e) => setUserNumber(e.target.value)}></input><br />
         <label>User Address:</label>
-        <input placeholder={detail.address} onChange={(e) => setUserAddress(e.target.value)} ></input>
+        <input value={userAddress} onChange={(e) => setUserAddress(e.target.value)} ></input>
         <button className="save-btn" onClick={updateUserDetail}>Save</button>
       </div>
     );

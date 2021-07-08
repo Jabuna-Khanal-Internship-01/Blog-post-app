@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectSignedIn,
   selectUserData,
-  selectUserId,
   setInput,
   setSignedIn,
   setUserData,
@@ -13,14 +12,13 @@ import {
 } from "../features/userSlice";
 import { GoogleLogout, GoogleLogin } from "react-google-login";
 import * as BlogServices from "../service/api";
-import {setToken, getToken} from '../utils/Token';
+import {setToken} from '../utils/Token';
 
 const NavBar = () => {
   const history = useHistory();
   const [inputValue, setInputValue] = useState("");
   const isSignedIn = useSelector(selectSignedIn);
   const userData = useSelector(selectUserData);
-  const userId = useSelector(selectUserId);
   const dispatch = useDispatch();
 
 

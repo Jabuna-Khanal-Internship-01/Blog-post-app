@@ -33,6 +33,12 @@ export async function createPost(post) {
   const response = await http.post(url,post);
   return response;
 }
+export async function updatePost(id,post){
+  console.log(id);
+  const url = `${api.endpoints.posts}/${id}`;
+  const response = await http.put(url,post);
+  return response;
+}
 
 export async function deletePost(id){
   const url = `${api.endpoints.posts}/${id}`;
@@ -62,5 +68,11 @@ export async function addComment(id,description){
 export async function deleteComment(id){
   const url = `${api.endpoints.comments}/${id}`;
   const response = await http.delete(url);
+  return response;
+}
+
+export async function updateComment(id,description){
+  const url = `${api.endpoints.comments}/${id}`;
+  const response = await http.put(url,description);
   return response;
 }
