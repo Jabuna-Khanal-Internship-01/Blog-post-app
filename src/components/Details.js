@@ -21,19 +21,19 @@ const Detail = (props) => {
   const [title, setTitle] = useState("");
   const [description, setDes] = useState("");
   const [authorName, setAuthorName] = useState("");
-  const [isEdit, setEdit] = useState(false);
+  const [isEditPost, setEditPost] = useState(false);
+  const [isEditComment, setEditComment] = useState(false);
+  const [commentDes, setCommentDes] = useState("");
 
   useEffect(() => {
     BlogServices.getPostById(props.location.state)
       .then((res) => {
-        console.log(res);
         dispatch(setDetail(res.comments));
         setDetails(res.comments);
         setTitleId(res.id);
         setTitle(res.title);
         setAuthorName(res.users.name);
         setDes(res.description);
-
         const canEdit = userId !== "" && userId === res.users._id;
         setIsAuthor(canEdit);
       })
@@ -42,7 +42,24 @@ const Detail = (props) => {
       });
   }, []);
 
+  const editPost = () => {
+    setEditPost(true);
+  };
+  const updatePost = () => {
+    const post = {
+      title: title,
+      description: description,
+    };
+    BlogServices.updatePost(titleId, post)
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
+  const cancelUpdate = () => {
+    setEditPost(false);
+  };
 
   const deleteBlogPost = () => {
     BlogServices.deletePost(props.location.state)
@@ -56,63 +73,104 @@ const Detail = (props) => {
 
   const postComment = () => {
     BlogServices.addComment(titleId, { description: comment })
-      .then((res) => {
-        console.log(res, "---");
+      .then((res) => {       
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const editPost =() =>{
-    setEdit(true);
-  }
-
-  const updatePost =()=>{
-    const post ={
-      title:title,
-      description:description,
-    }
-    BlogServices.updatePost(titleId,post).then ((res)=>{
-      
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-  };
-
-  const cancelUpdate =() =>{
-    setEdit(false)
-  }
-
-
-  console.log(details);
   const renderDetail = (detail) => {
+  
     const delComment = () => {
       BlogServices.deleteComment(detail._id)
-        .then((res) => {})
+        .then((res) => {
+          console.log(res);
+        })
         .catch((err) => {
           console.log(err);
         });
     };
-    const editComment = () => {
-      
+    const clickedEdit = () => {
+      setEditComment(true);
     };
 
+    const cancelEditComment = () => {
+      setEditComment(false);
+    };
+    const editComment = () => {
+      BlogServices.updateComment(titleId, { description: comment })
+        .then((res) => {
+          console.log(res, "---");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
     return (
       <>
         {isAuthor ? (
           <div className="blog">
-            <p className="blog-title">{detail.description}</p>
+            <p className="blog-title">Comment: {detail.description}</p>
             <a className="post-by">By:{detail.users.name}</a>
-            <button onClick={editComment}>Edit</button>
-            <button onClick={delComment}>Delete</button>
+            {userId === detail.users._id ? (
+              <>
+                <button onClick={clickedEdit} className="save-btn">
+                  Edit
+                </button>
+                {isEditComment && (
+                  <>
+                    <input
+                      value={commentDes}
+                      onChange={(e) => setCommentDes(e.target.value)}
+                    ></input>
+                    <button onClick={editComment} className="save-btn">
+                      Save
+                    </button>
+                    <button onClick={cancelEditComment} className="cancel-btn">
+                      Cancel
+                    </button>
+                  </>
+                )}
+                <button onClick={delComment} className="cancel-btn">
+                  Delete
+                </button>
+              </>
+            ) : (
+              <button onClick={delComment} className="cancel-btn">
+                Delete
+              </button>
+            )}
           </div>
         ) : (
           <div className="blog">
             <p className="blog-title">{detail.description}</p>
             <a className="post-by">By:{detail.users.name}</a>
+            {userId === detail.users._id && (
+              <>
+                <button onClick={clickedEdit} className="save-btn">
+                  Edit
+                </button>
+                {isEditComment && (
+                  <>
+                    <input
+                      value={commentDes}
+                      onChange={(e) => setDes(e.target.value)}
+                    ></input>
+                    <button onClick={editComment} className="save-btn">
+                      Save
+                    </button>
+                    <button onClick={cancelEditComment} className="cancel-btn">
+                      Cancel
+                    </button>
+                  </>
+                )}
+                <button onClick={delComment} className="cancel-btn">
+                  Delete
+                </button>
+              </>
+            )}
           </div>
         )}
       </>
@@ -122,7 +180,7 @@ const Detail = (props) => {
   return (
     <>
       <NavBar />
-      {isEdit && (
+      {isEditPost && (
         <div className="update">
           <input
             value={title}
@@ -134,8 +192,12 @@ const Detail = (props) => {
             onChange={(e) => setDes(e.target.value)}
           ></input>
           <br />
-          <button onClick={updatePost} className="save-btn">Update</button>
-          <button onClick={cancelUpdate} className="cancel-btn">Cancel</button>
+          <button onClick={updatePost} className="save-btn">
+            Update
+          </button>
+          <button onClick={cancelUpdate} className="cancel-btn">
+            Cancel
+          </button>
         </div>
       )}
 
@@ -157,8 +219,12 @@ const Detail = (props) => {
             <a className="post-by">By:{authorName}</a>
             {isAuthor && (
               <>
-                <button onClick={editPost}>Edit</button>
-                <button onClick={deleteBlogPost}>delete</button>
+                <button onClick={editPost} className="save-btn">
+                  Edit
+                </button>
+                <button onClick={deleteBlogPost} className="cancel-btn">
+                  Delete
+                </button>
               </>
             )}
           </div>

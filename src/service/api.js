@@ -3,12 +3,14 @@ import config from "../config";
 
 const { api } = config;
 
+/*for Authneticaion */
 export async function logIn(tokenId) {
   const url = `${api.endpoints.auth}`;
   const response = await http.post(url, tokenId);
   return response;
 }
 
+/* fetch all post */
 export async function getPosts() {
   const url = `${api.endpoints.posts}`;
   const response = await http.get(url);
@@ -28,9 +30,11 @@ export async function getPostById(id) {
   return response;
 }
 
+/*creating ,deleting,updating post */
 export async function createPost(post) {
   const url = `${api.endpoints.posts}`;
   const response = await http.post(url,post);
+ 
   return response;
 }
 export async function updatePost(id,post){
@@ -46,6 +50,7 @@ export async function deletePost(id){
   return response;
 }
 
+/*Fetching the  user detail for profile */
 export async function getUserDetail(id){
   const url = `${api.endpoints.users}/${id}`;
   const response = await http.get(url);
@@ -59,9 +64,11 @@ export async function updateUserDetail(id, detail){
 
 }
 
+/*for updating,adding and deleting comment */
 export async function addComment(id,description){
   const url = `${api.endpoints.posts}/${id}/comments`;
   const response = await http.post(url,description);
+  console.log(response,'-------')
   return response;
 }
 
