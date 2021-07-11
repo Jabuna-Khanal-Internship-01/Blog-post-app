@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { selectUserId } from "../features/userSlice";
 import * as BlogServices from "../service/api";
 
+
 const Profile = () => {
   const userId = useSelector(selectUserId);
   const [detail, setUserDetail] = useState("");

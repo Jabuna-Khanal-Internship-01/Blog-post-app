@@ -55,12 +55,17 @@ body {
 .logout-btn {
   position: absolute;
   top: 10px;
+  width:50px;
   border-radius: 2px;
-  margin-left: 50px;
+  margin-left: 45px;
+  color: white;
+  background-color: red;
 }
+
 /* Create blog button*/
-.create-blog-btn{
-  background-color:green ;
+
+.create-blog-btn {
+  background-color: green;
   padding: 5px;
   color: wheat;
   border-radius: 2px;
@@ -87,18 +92,16 @@ body {
 }
 
 .blogs-header {
-  
   font-size: 20px;
   background-color: #e0e0e0;
   padding: 5px;
-  width:120px;
+  width: 120px;
   border: 1px solid white;
 }
 
 .blog {
   background-color: #e0e0e0;
   border: 2px solid white;
-
 }
 
 .blog-title {
@@ -128,33 +131,44 @@ body {
 }
 
 /* Create Blog*/
-.save-btn{
+
+.addBlog{
+  margin-top: 70px;
+}
+.save-btn {
   background-color: green;
   color: wheat;
   padding: 2px;
   border-radius: 3px;
 }
-.cancel-btn{
+
+.cancel-btn {
   padding: 2px;
   border-radius: 3px;
 }
+
 /*update post */
-.update{
+
+.update {
   margin-top: 100px;
 }
+
 /* Add comment*/
-.add-comment{
+
+.add-comment {
   margin-top: 90px;
   margin-left: 15px;
 }
 
-  .comment-header{
+.comment-header {}
 
-  }
+.comment-text {}
 
-  .comment-text{
+/* profile */
 
-  }
-  
-
-
+.profile-btn {
+  position: absolute;
+  margin-top: 10px;
+  color: wheat;
+  margin-left: -50px;
+}

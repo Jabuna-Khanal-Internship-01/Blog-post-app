@@ -5,14 +5,13 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setDetail,
-  selectUserId,
   selectSignedIn,
-  setUserData,
 } from "../features/userSlice";
+import * as localStorageData from "../utils/userData";
 
 const Detail = (props) => {
   const dispatch = useDispatch();
-  const userId = useSelector(selectUserId);
+  const userId = localStorageData.getUserId();
   const isSignedIn = useSelector(selectSignedIn);
   const [details, setDetails] = useState([]);
   const [isAuthor, setIsAuthor] = useState(false);
@@ -51,7 +50,9 @@ const Detail = (props) => {
       description: description,
     };
     BlogServices.updatePost(titleId, post)
-      .then((res) => {})
+      .then((res) => {
+
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -64,7 +65,7 @@ const Detail = (props) => {
   const deleteBlogPost = () => {
     BlogServices.deletePost(props.location.state)
       .then((res) => {
-        console.log("deleted post");
+        console.log(res,"deleted post");
       })
       .catch((err) => {
         console.log(err);
@@ -73,7 +74,8 @@ const Detail = (props) => {
 
   const postComment = () => {
     BlogServices.addComment(titleId, { description: comment })
-      .then((res) => {       
+      .then((res) => { 
+        console.log(res,'postcomment');      
       })
       .catch((err) => {
         console.log(err);

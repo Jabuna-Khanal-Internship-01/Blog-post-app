@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUserInput, setBlogData } from "../features/userSlice";
 import {useHistory} from 'react-router-dom'
 
-const Blogs = (props) => {
+const Blogs = () => {
   const history = useHistory();
   const searchInput = useSelector(selectUserInput);
   const dispatch = useDispatch();
